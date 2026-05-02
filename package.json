@@ -15,7 +15,7 @@
     "start": "node app_server.js",
     "scheduler": "node vehicle_maintence_scheduler/index.js",
     "priority": "node notification_app_be/index.js",
-    "log:demo": "node -e \"import('./logging_middleware/index.js').then(({configureLogger, Log}) => { configureLogger({ token: process.env.APP_LOG_TOKEN || process.env.APP_API_TOKEN || process.env.AFFORDMED_LOG_TOKEN || '' }); return Log('backend','info','utils','demo log call'); }).then((value) => { console.log(JSON.stringify(value, null, 2)); }).catch((error) => { console.error(error.message); process.exit(1); });\""
+    "log:demo": "node -e \"import('./env_loader.js').then(({loadEnvFile}) => { loadEnvFile(); return import('./logging_middleware/index.js'); }).then(({configureLogger, Log}) => { configureLogger({ token: process.env.APP_LOG_TOKEN || process.env.APP_API_TOKEN || process.env.AFFORDMED_LOG_TOKEN || '' }); return Log('backend','info','utils','demo log call'); }).then((value) => { console.log(JSON.stringify(value, null, 2)); }).catch((error) => { console.error(error.message); process.exit(1); });\""
   },
   "engines": {
     "node": ">=18"
