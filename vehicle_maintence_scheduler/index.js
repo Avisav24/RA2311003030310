@@ -8,10 +8,12 @@ const BASE_URL =
   process.env.AFFORDMED_API_URL ??
   "http://20.207.122.201/evaluation-service";
 
-const API_TOKEN = process.env.APP_API_TOKEN ?? process.env.AFFORDMED_API_TOKEN ?? "";
+const API_TOKEN =
+  process.env.APP_API_TOKEN ?? process.env.AFFORDMED_API_TOKEN ?? "";
 
 configureLogger({
-  token: process.env.APP_LOG_TOKEN ?? process.env.AFFORDMED_LOG_TOKEN ?? API_TOKEN,
+  token:
+    process.env.APP_LOG_TOKEN ?? process.env.AFFORDMED_LOG_TOKEN ?? API_TOKEN,
 });
 
 async function fetchJson(path) {

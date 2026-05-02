@@ -116,4 +116,3 @@ export async function Log(stack, level, packageName, message) {
 export function createLogger() {
   return Log;
 }
-
