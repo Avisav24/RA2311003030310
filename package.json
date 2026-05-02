@@ -1,11 +1,10 @@
 {
-  "name": "affordmed-backend",
+  "name": "backend-evaluation-project",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Backend implementation for Affordmed Campus Hiring Evaluation",
+  "description": "Backend evaluation submission project",
   "keywords": [
-    "affordmed",
     "backend",
     "logging-middleware",
     "scheduler",
@@ -13,6 +12,7 @@
   ],
   "scripts": {
     "setup": "node register_and_auth.js",
+    "start": "node app_server.js",
     "scheduler": "node vehicle_maintence_scheduler/index.js",
     "priority": "node notification_app_be/index.js",
     "log:demo": "node -e \"import('./logging_middleware/index.js').then(({configureLogger, Log}) => { configureLogger({ token: process.env.AFFORDMED_LOG_TOKEN || '' }); return Log('backend','info','utils','demo log call'); }).then((value) => { console.log(JSON.stringify(value, null, 2)); }).catch((error) => { console.error(error.message); process.exit(1); });\""

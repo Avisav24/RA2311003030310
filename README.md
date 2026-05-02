@@ -1,6 +1,6 @@
-# Affordmed Backend Assessment
+# Backend Assessment Submission
 
-This repository contains the backend implementation for the Affordmed Campus Hiring Evaluation. The solution includes a reusable logging middleware, a vehicle maintenance scheduler, and a campus notification system with priority inbox functionality.
+This repository contains a backend submission with a reusable logging middleware, a vehicle maintenance scheduler, and a notifications priority module.
 
 ## Project Structure
 
@@ -14,6 +14,7 @@ This repository contains the backend implementation for the Affordmed Campus Hir
 │   └── index.js
 ├── notification_system_design.md  # Design document (Stages 1-6)
 ├── register_and_auth.js         # Token verification helper
+├── app_server.js                # Local API server for Postman/Insomnia calls
 ├── package.json
 ├── .env.example
 └── README.md
@@ -86,7 +87,24 @@ The logging middleware (`logging_middleware/index.js`) is integrated throughout 
 
 - **Error handling**: All log calls are safe; errors are caught and logged separately
 
-### 5. Running the Components
+### 5. Run Local APIs For Screenshots
+
+Start the local server first:
+
+```bash
+npm run start
+```
+
+Then use Postman or Insomnia against your app:
+
+- `GET http://localhost:8080/api/health`
+- `POST http://localhost:8080/api/logs`
+- `GET http://localhost:8080/api/scheduler`
+- `GET http://localhost:8080/api/notifications/priority?limit=10`
+
+Each response includes `responseTimeMs` so your screenshots can show request/response/response-time from your app.
+
+### 6. Running the Components Directly
 
 #### Vehicle Maintenance Scheduler
 
@@ -182,6 +200,6 @@ This implementation follows production-grade standards:
 - Reusable, modular components
 - No external dependencies (Node.js built-ins only)
 
-## License
+## Notes
 
-Confidential — Affordmed Technologies Private Limited
+Keep `.env` local and do not commit secrets.
