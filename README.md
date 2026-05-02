@@ -6,15 +6,14 @@ This repository contains a backend submission with a reusable logging middleware
 
 ```text
 .
-├── logging_middleware/          # Reusable logging package
+├── logging_middleware/            # Reusable logging package
 │   └── index.js
-├── vehicle_maintence_scheduler/ # Vehicle maintenance scheduling
+├── vehicle_maintence_scheduler/   # Vehicle maintenance scheduling
 │   └── index.js
-├── notification_app_be/         # Notification system with priority inbox
+├── notification_app_be/           # Notification system with priority inbox
 │   └── index.js
 ├── notification_system_design.md  # Design document (Stages 1-6)
-├── register_and_auth.js         # Token verification helper
-├── app_server.js                # Local API server for Postman/Insomnia calls
+├── Screenshots/                   # Postman/Insomnia output screenshots
 ├── package.json
 ├── .env.example
 └── README.md
@@ -38,39 +37,11 @@ cp .env.example .env
 Then update the values in `.env`:
 
 - `APP_API_URL`: The test server base URL (default: `http://20.207.122.201/evaluation-service`)
-- `APP_API_TOKEN`: Your access token (obtained after registration)
+- `APP_API_TOKEN`: Your access token (obtained after registration and authentication)
 - `APP_LOG_TOKEN`: Your logging token (same as API token)
 - `APP_PRIORITY_LIMIT`: Number of top notifications to return (default: 10)
 
-The scripts automatically load `.env` from the project root, so you do not need to export variables manually in PowerShell.
-
-### 3. Token Setup and Verification
-
-If your email already contains the access token, put it in your `.env` file first.
-
-```bash
-cp .env.example .env
-```
-
-Then add the token:
-
-```env
-APP_API_TOKEN=<your_access_token_here>
-APP_LOG_TOKEN=<your_access_token_here>
-```
-
-Run the verification script:
-
-```bash
-node register_and_auth.js
-```
-
-This will:
-
-1. Read the token from your environment
-2. Verify it against a protected API
-3. Log a success message through the logging middleware
-4. Print a sample protected response
+### 3. Running the Components
 
 ### 4. Logging Middleware
 
@@ -87,24 +58,7 @@ The logging middleware (`logging_middleware/index.js`) is integrated throughout 
 
 - **Error handling**: All log calls are safe; errors are caught and logged separately
 
-### 5. Run Local APIs For Screenshots
-
-Start the local server first:
-
-```bash
-npm run start
-```
-
-Then use Postman or Insomnia against your app:
-
-- `GET http://localhost:8080/api/health`
-- `POST http://localhost:8080/api/logs`
-- `GET http://localhost:8080/api/scheduler`
-- `GET http://localhost:8080/api/notifications/priority?limit=10`
-
-Each response includes `responseTimeMs` so your screenshots can show request/response/response-time from your app.
-
-### 6. Running the Components Directly
+### 4. Running the Components Directly
 
 #### Vehicle Maintenance Scheduler
 
@@ -125,14 +79,6 @@ node notification_app_be/index.js
 ```
 
 This will output a JSON object with the top notifications sorted by priority.
-
-#### Demo Logging Call
-
-Test the logging middleware:
-
-```bash
-npm run log:demo
-```
 
 ## Logging Integration
 
