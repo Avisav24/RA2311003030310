@@ -1,4 +1,5 @@
 const DEFAULT_LOG_URL =
+  process.env.APP_LOG_URL ??
   process.env.AFFORDMED_LOG_URL ??
   "http://20.207.122.201/evaluation-service/logs";
 const ALLOWED_STACKS = new Set(["backend", "frontend"]);
@@ -26,7 +27,7 @@ const ALLOWED_PACKAGES = new Set([
 ]);
 
 const loggerState = {
-  token: process.env.AFFORDMED_LOG_TOKEN ?? "",
+  token: process.env.APP_LOG_TOKEN ?? process.env.AFFORDMED_LOG_TOKEN ?? "",
   fetchImpl: globalThis.fetch ? globalThis.fetch.bind(globalThis) : null,
 };
 

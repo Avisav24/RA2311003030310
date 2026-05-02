@@ -37,10 +37,10 @@ cp .env.example .env
 
 Then update the values in `.env`:
 
-- `AFFORDMED_API_URL`: The test server base URL (default: `http://20.207.122.201/evaluation-service`)
-- `AFFORDMED_API_TOKEN`: Your access token (obtained after registration)
-- `AFFORDMED_LOG_TOKEN`: Your logging token (same as API token)
-- `AFFORDMED_PRIORITY_LIMIT`: Number of top notifications to return (default: 10)
+- `APP_API_URL`: The test server base URL (default: `http://20.207.122.201/evaluation-service`)
+- `APP_API_TOKEN`: Your access token (obtained after registration)
+- `APP_LOG_TOKEN`: Your logging token (same as API token)
+- `APP_PRIORITY_LIMIT`: Number of top notifications to return (default: 10)
 
 The scripts automatically load `.env` from the project root, so you do not need to export variables manually in PowerShell.
 
@@ -55,8 +55,8 @@ cp .env.example .env
 Then add the token:
 
 ```env
-AFFORDMED_API_TOKEN=<your_access_token_here>
-AFFORDMED_LOG_TOKEN=<your_access_token_here>
+APP_API_TOKEN=<your_access_token_here>
+APP_LOG_TOKEN=<your_access_token_here>
 ```
 
 Run the verification script:

@@ -6,7 +6,11 @@ const SERVER_URL = "http://20.207.122.201/evaluation-service";
 loadEnvFile();
 
 const ACCESS_TOKEN =
-  process.env.AFFORDMED_API_TOKEN || process.env.AFFORDMED_LOG_TOKEN || "";
+  process.env.APP_API_TOKEN ||
+  process.env.APP_LOG_TOKEN ||
+  process.env.AFFORDMED_API_TOKEN ||
+  process.env.AFFORDMED_LOG_TOKEN ||
+  "";
 
 configureLogger({ token: ACCESS_TOKEN });
 
@@ -27,11 +31,11 @@ async function readResponseBody(response) {
 async function verifyToken() {
   if (!ACCESS_TOKEN) {
     throw new Error(
-      "No access token found. Set AFFORDMED_API_TOKEN in your .env file.",
+      "No access token found. Set APP_API_TOKEN in your .env file.",
     );
   }
 
-  console.log("=== Affordmed Backend Setup ===\n");
+  console.log("=== Backend Setup ===\n");
   console.log("Verifying token against protected APIs...");
 
   const response = await fetch(`${SERVER_URL}/depots`, {
@@ -57,8 +61,8 @@ async function verifyToken() {
   console.log(JSON.stringify(body, null, 2));
 
   console.log("\nSave these in your .env file:");
-  console.log(`AFFORDMED_API_TOKEN=${ACCESS_TOKEN}`);
-  console.log(`AFFORDMED_LOG_TOKEN=${ACCESS_TOKEN}`);
+  console.log(`APP_API_TOKEN=${ACCESS_TOKEN}`);
+  console.log(`APP_LOG_TOKEN=${ACCESS_TOKEN}`);
 }
 
 verifyToken().catch((error) => {

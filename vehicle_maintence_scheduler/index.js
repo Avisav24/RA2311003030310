@@ -4,12 +4,14 @@ import { loadEnvFile } from "../env_loader.js";
 loadEnvFile();
 
 const BASE_URL =
-  process.env.AFFORDMED_API_URL ?? "http://20.207.122.201/evaluation-service";
+  process.env.APP_API_URL ??
+  process.env.AFFORDMED_API_URL ??
+  "http://20.207.122.201/evaluation-service";
 
-const API_TOKEN = process.env.AFFORDMED_API_TOKEN ?? "";
+const API_TOKEN = process.env.APP_API_TOKEN ?? process.env.AFFORDMED_API_TOKEN ?? "";
 
 configureLogger({
-  token: process.env.AFFORDMED_LOG_TOKEN ?? API_TOKEN,
+  token: process.env.APP_LOG_TOKEN ?? process.env.AFFORDMED_LOG_TOKEN ?? API_TOKEN,
 });
 
 async function fetchJson(path) {
@@ -101,7 +103,7 @@ function normalizeTasks(rawVehicles) {
 
 async function buildSchedule() {
   if (!API_TOKEN) {
-    throw new Error("AFFORDMED_API_TOKEN is not configured");
+    throw new Error("APP_API_TOKEN is not configured");
   }
 
   const [depotPayload, vehiclePayload] = await Promise.all([

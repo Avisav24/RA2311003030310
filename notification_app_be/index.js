@@ -4,13 +4,17 @@ import { loadEnvFile } from "../env_loader.js";
 loadEnvFile();
 
 const BASE_URL =
-  process.env.AFFORDMED_API_URL ?? "http://20.207.122.201/evaluation-service";
+  process.env.APP_API_URL ??
+  process.env.AFFORDMED_API_URL ??
+  "http://20.207.122.201/evaluation-service";
 
-const API_TOKEN = process.env.AFFORDMED_API_TOKEN ?? "";
-const DEFAULT_LIMIT = Number(process.env.AFFORDMED_PRIORITY_LIMIT ?? 10);
+const API_TOKEN = process.env.APP_API_TOKEN ?? process.env.AFFORDMED_API_TOKEN ?? "";
+const DEFAULT_LIMIT = Number(
+  process.env.APP_PRIORITY_LIMIT ?? process.env.AFFORDMED_PRIORITY_LIMIT ?? 10,
+);
 
 configureLogger({
-  token: process.env.AFFORDMED_LOG_TOKEN ?? API_TOKEN,
+  token: process.env.APP_LOG_TOKEN ?? process.env.AFFORDMED_LOG_TOKEN ?? API_TOKEN,
 });
 
 const PRIORITY_WEIGHT = new Map([
@@ -156,9 +160,9 @@ async function fetchNotificationsFromApi() {
       "backend",
       "error",
       "handler",
-      "AFFORDMED_API_TOKEN is not configured",
+      "APP_API_TOKEN is not configured",
     );
-    throw new Error("AFFORDMED_API_TOKEN is not configured");
+    throw new Error("APP_API_TOKEN is not configured");
   }
 
   const response = await fetch(`${BASE_URL}/notifications`, {
