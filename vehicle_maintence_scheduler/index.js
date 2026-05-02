@@ -1,7 +1,11 @@
 import { Log, configureLogger } from "../logging_middleware/index.js";
+import { loadEnvFile } from "../env_loader.js";
+
+loadEnvFile();
 
 const BASE_URL =
   process.env.AFFORDMED_API_URL ?? "http://20.207.122.201/evaluation-service";
+
 const API_TOKEN = process.env.AFFORDMED_API_TOKEN ?? "";
 
 configureLogger({

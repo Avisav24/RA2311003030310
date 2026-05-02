@@ -6,8 +6,8 @@ This checklist ensures all deliverables are completed correctly before final sub
 
 ### 1. Registration and Setup
 
-- [ ] Run `node register_and_auth.js`
-- [ ] Save the `access_token` from the response
+- [ ] Put the access token from your email into `.env`
+- [ ] Run `node register_and_auth.js` to verify token access
 - [ ] Create `.env` file with `AFFORDMED_API_TOKEN=<your_token>`
 - [ ] Verify environment variables are set correctly
 
@@ -68,15 +68,13 @@ Capture these screenshots using Postman or Insomnia:
 
 #### Registration Flow
 
-- [ ] Screenshot: POST to `/register` endpoint
-  - Request body with email, roll number, access code
-  - Response with `clientID` and `clientSecret`
+- [ ] Screenshot: the email or source showing your access token
+  - Token visible only if allowed by the evaluation instructions
 
 #### Authentication Flow
 
-- [ ] Screenshot: POST to `/auth` endpoint
-  - Request body with credentials
-  - Response with `access_token` and `token_type`
+- [ ] Screenshot: token verification run from `node register_and_auth.js`
+  - Console output showing protected API access was successful
 
 #### Logging Middleware Demo
 
@@ -155,17 +153,17 @@ Capture these screenshots using Postman or Insomnia:
 - **Logging is mandatory** — every significant code path must log
 - **Original code only** — plagiarism leads to immediate rejection
 - **No user registration/login** — assume users are pre-authorized
-- **Test server credentials** — save `clientID` and `clientSecret` immediately
+- **Test server access** — keep your access token safe and reuse it for protected APIs
 
 ## Troubleshooting
 
-| Issue                            | Solution                                                       |
-| -------------------------------- | -------------------------------------------------------------- |
-| "Token not configured"           | Ensure `.env` file has `AFFORDMED_API_TOKEN` set               |
-| "Request failed with status 401" | Token has expired or is invalid; re-run `register_and_auth.js` |
-| "No depots returned"             | Verify API token is correct and server is accessible           |
-| "Plagiarism detected"            | Ensure all code is your own original work                      |
-| "Missing logging calls"          | Check all functions have appropriate Log calls                 |
+| Issue                            | Solution                                                     |
+| -------------------------------- | ------------------------------------------------------------ |
+| "Token not configured"           | Ensure `.env` file has `AFFORDMED_API_TOKEN` set             |
+| "Request failed with status 401" | Token has expired or is invalid; replace the token in `.env` |
+| "No depots returned"             | Verify API token is correct and server is accessible         |
+| "Plagiarism detected"            | Ensure all code is your own original work                    |
+| "Missing logging calls"          | Check all functions have appropriate Log calls               |
 
 ## Support
 

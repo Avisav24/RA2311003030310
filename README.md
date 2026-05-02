@@ -4,7 +4,7 @@ This repository contains the backend implementation for the Affordmed Campus Hir
 
 ## Project Structure
 
-```
+```text
 .
 ├── logging_middleware/          # Reusable logging package
 │   └── index.js
@@ -13,7 +13,7 @@ This repository contains the backend implementation for the Affordmed Campus Hir
 ├── notification_app_be/         # Notification system with priority inbox
 │   └── index.js
 ├── notification_system_design.md  # Design document (Stages 1-6)
-├── register_and_auth.js         # Registration and authentication helper
+├── register_and_auth.js         # Token verification helper
 ├── package.json
 ├── .env.example
 └── README.md
@@ -41,9 +41,24 @@ Then update the values in `.env`:
 - `AFFORDMED_LOG_TOKEN`: Your logging token (same as API token)
 - `AFFORDMED_PRIORITY_LIMIT`: Number of top notifications to return (default: 10)
 
-### 3. Registration and Authentication
+The scripts automatically load `.env` from the project root, so you do not need to export variables manually in PowerShell.
 
-Run the registration script to obtain your credentials:
+### 3. Token Setup and Verification
+
+If your email already contains the access token, put it in your `.env` file first.
+
+```bash
+cp .env.example .env
+```
+
+Then add the token:
+
+```env
+AFFORDMED_API_TOKEN=<your_access_token_here>
+AFFORDMED_LOG_TOKEN=<your_access_token_here>
+```
+
+Run the verification script:
 
 ```bash
 node register_and_auth.js
@@ -51,19 +66,10 @@ node register_and_auth.js
 
 This will:
 
-1. Register your account with the test server
-2. Receive `clientID` and `clientSecret`
-3. Authenticate to get the `access_token`
-4. Display the token for use in your `.env` file
-
-**Important**: Save your `clientID` and `clientSecret` immediately—they cannot be retrieved again.
-
-Update your `.env` file with the `access_token`:
-
-```env
-AFFORDMED_API_TOKEN=<your_access_token_here>
-AFFORDMED_LOG_TOKEN=<your_access_token_here>
-```
+1. Read the token from your environment
+2. Verify it against a protected API
+3. Log a success message through the logging middleware
+4. Print a sample protected response
 
 ### 4. Logging Middleware
 
@@ -116,7 +122,7 @@ The logging middleware is integrated at key points throughout the codebase:
 
 - **notification_app_be**: Logs when fetching notifications, processing them, and finding the top unread items
 - **vehicle_maintence_scheduler**: Logs depot planning and error conditions
-- **register_and_auth**: Logs registration and authentication flows
+- **register_and_auth**: Verifies access token and logs success
 
 All Log calls include descriptive context about what is happening, making it easy to troubleshoot and understand application behavior.
 
@@ -124,8 +130,6 @@ All Log calls include descriptive context about what is happening, making it eas
 
 All API calls use the protected endpoints provided by the test server:
 
-- `POST /evaluation-service/register` — Register a new candidate
-- `POST /evaluation-service/auth` — Authenticate and get access token
 - `POST /evaluation-service/logs` — Post application logs
 - `GET /evaluation-service/depots` — Fetch depot information
 - `GET /evaluation-service/vehicles` — Fetch vehicle maintenance tasks
