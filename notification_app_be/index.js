@@ -1,4 +1,5 @@
 import { Log, configureLogger } from "../logging_middleware/index.js";
+import { TopKHeap } from "./heap.js";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -68,110 +69,6 @@ function compareNotifications(left, right) {
   return leftPriority.timestamp - rightPriority.timestamp;
 }
 
-class TopKPriorityHeap {
-  constructor(limit) {
-    this.limit = limit;
-    this.items = [];
-  }
-
-  size() {
-    return this.items.length;
-  }
-
-  peek() {
-    return this.items[0] ?? null;
-  }
-
-  push(item) {
-    this.items.push(item);
-    this.bubbleUp(this.items.length - 1);
-    Log(
-      "backend",
-      "debug",
-      "utils",
-      `heap item inserted, size now ${this.items.length}`,
-    ).catch(() => {});
-  }
-
-  replaceTop(item) {
-    this.items[0] = item;
-    this.bubbleDown(0);
-  }
-
-  bubbleUp(index) {
-    let current = index;
-
-    while (current > 0) {
-      const parent = Math.floor((current - 1) / 2);
-
-      if (compareNotifications(this.items[current], this.items[parent]) >= 0) {
-        break;
-      }
-
-      [this.items[current], this.items[parent]] = [
-        this.items[parent],
-        this.items[current],
-      ];
-      current = parent;
-    }
-  }
-
-  bubbleDown(index) {
-    let current = index;
-
-    while (true) {
-      const left = current * 2 + 1;
-      const right = left + 1;
-      let smallest = current;
-
-      if (
-        left < this.items.length &&
-        compareNotifications(this.items[left], this.items[smallest]) < 0
-      ) {
-        smallest = left;
-      }
-
-      if (
-        right < this.items.length &&
-        compareNotifications(this.items[right], this.items[smallest]) < 0
-      ) {
-        smallest = right;
-      }
-
-      if (smallest === current) {
-        break;
-      }
-
-      [this.items[current], this.items[smallest]] = [
-        this.items[smallest],
-        this.items[current],
-      ];
-      current = smallest;
-    }
-  }
-
-  insert(item) {
-    if (this.limit <= 0) {
-      return;
-    }
-
-    if (this.size() < this.limit) {
-      this.push(item);
-      return;
-    }
-
-    if (compareNotifications(item, this.peek()) > 0) {
-      this.replaceTop(item);
-    }
-  }
-
-  toSortedArray() {
-    return [...this.items].sort((left, right) =>
-      compareNotifications(right, left),
-    );
-  }
-}
-
 async function fetchNotificationsFromApi() {
   await Log("backend", "info", "handler", `fetching notifications from API`);
 
@@ -230,16 +127,14 @@ export function getTopNotifications(notifications, limit = DEFAULT_LIMIT) {
     "backend",
     "info",
     "service",
-    `processing ${notifications.length} notifications for top ${limit}`,
+    `processing ${notifications.length} notifications for top-${limit} priority inbox`,
   ).catch(() => {});
-  const heap = new TopKPriorityHeap(limit);
+
+  const heap = new TopKHeap(limit, compareNotifications);
 
   let unreadCount = 0;
   for (const notification of notifications) {
-    if (!notification || !isUnread(notification)) {
-      continue;
-    }
-
+    if (!notification || !isUnread(notification)) continue;
     unreadCount += 1;
     heap.insert(notification);
   }
@@ -248,8 +143,9 @@ export function getTopNotifications(notifications, limit = DEFAULT_LIMIT) {
     "backend",
     "info",
     "service",
-    `found ${unreadCount} unread notifications, selected top ${heap.size()}`,
+    `found ${unreadCount} unread notifications, returning top ${heap.size()}`,
   ).catch(() => {});
+
   return heap.toSortedArray().map((notification) => ({
     ID: notification.ID ?? notification.id,
     Type: notification.Type ?? notification.type,

@@ -1,30 +1,12 @@
+import { ALLOWED_STACKS as _STACKS, ALLOWED_LEVELS as _LEVELS, ALLOWED_PACKAGES as _PACKAGES, LOG_API_URL } from "./constants.js";
+
 const DEFAULT_LOG_URL =
   process.env.APP_LOG_URL ??
   process.env.AFFORDMED_LOG_URL ??
-  "http://20.207.122.201/evaluation-service/logs";
-const ALLOWED_STACKS = new Set(["backend", "frontend"]);
-const ALLOWED_LEVELS = new Set(["debug", "info", "warn", "error", "fatal"]);
-const ALLOWED_PACKAGES = new Set([
-  "cache",
-  "controller",
-  "cron_job",
-  "db",
-  "domain",
-  "handler",
-  "repository",
-  "route",
-  "service",
-  "api",
-  "component",
-  "hook",
-  "page",
-  "state",
-  "style",
-  "auth",
-  "config",
-  "middleware",
-  "utils",
-]);
+  LOG_API_URL;
+const ALLOWED_STACKS = new Set(_STACKS);
+const ALLOWED_LEVELS = new Set(_LEVELS);
+const ALLOWED_PACKAGES = new Set(_PACKAGES);
 
 const loggerState = {
   token: process.env.APP_LOG_TOKEN ?? process.env.AFFORDMED_LOG_TOKEN ?? "",

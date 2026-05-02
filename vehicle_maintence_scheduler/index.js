@@ -1,4 +1,5 @@
 import { Log, configureLogger } from "../logging_middleware/index.js";
+import { solveKnapsack } from "./knapsack.js";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -61,45 +62,6 @@ async function fetchJson(path) {
   }
 
   return body;
-}
-
-function solveKnapsack(tasks, capacity) {
-  const itemCount = tasks.length;
-  const dp = Array.from({ length: itemCount + 1 }, () =>
-    Array(capacity + 1).fill(0),
-  );
-
-  for (let index = 1; index <= itemCount; index += 1) {
-    const task = tasks[index - 1];
-
-    for (let hours = 0; hours <= capacity; hours += 1) {
-      const skip = dp[index - 1][hours];
-      const take =
-        task.duration <= hours
-          ? dp[index - 1][hours - task.duration] + task.impact
-          : Number.NEGATIVE_INFINITY;
-      dp[index][hours] = Math.max(skip, take);
-    }
-  }
-
-  const selected = [];
-  let hoursLeft = capacity;
-
-  for (let index = itemCount; index >= 1; index -= 1) {
-    if (dp[index][hoursLeft] !== dp[index - 1][hoursLeft]) {
-      const task = tasks[index - 1];
-      selected.push(task);
-      hoursLeft -= task.duration;
-    }
-  }
-
-  selected.reverse();
-
-  return {
-    selected,
-    totalDuration: selected.reduce((sum, task) => sum + task.duration, 0),
-    totalImpact: selected.reduce((sum, task) => sum + task.impact, 0),
-  };
 }
 
 function normalizeTasks(rawVehicles) {
